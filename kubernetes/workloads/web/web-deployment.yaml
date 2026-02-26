@@ -41,3 +41,30 @@ spec:
       port: 80
       targetPort: 80
       nodePort: 30080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-frontend-ingress
+  namespace: default
+  annotations:
+    # Tell the cluster to use NGINX
+    kubernetes.io/ingress.class: nginx
+    # Tell cert-manager to generate a certificate using our issuer
+    cert-manager.io/cluster-issuer: "selfsigned-issuer"
+spec:
+  tls:
+  - hosts:
+    - webapp.local
+    secretName: webapp-tls-secret # cert-manager will place the cert here
+  rules:
+  - host: webapp.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web-frontend-svc
+            port:
+              number: 80
