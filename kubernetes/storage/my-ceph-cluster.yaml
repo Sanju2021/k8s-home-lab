@@ -1,1 +1,23 @@
 # Paste your CephCluster manifest here
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: rook-ceph
+  namespace: rook-ceph
+spec:
+  cephVersion:
+    image: quay.io/ceph/ceph:v18.2.1
+    allowUnsupported: false
+  dataDirHostPath: /var/lib/rook
+  mon:
+    count: 3
+    allowMultiplePerNode: false
+  dashboard:
+    enabled: true
+    ssl: false
+  crashCollector:
+    disable: false
+  storage:
+    useAllNodes: true
+    useAllDevices: true
+    # Ceph will automatically ignore the OS disk and grab the empty 100GB disk
