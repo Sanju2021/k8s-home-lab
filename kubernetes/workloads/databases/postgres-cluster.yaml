@@ -1,1 +1,19 @@
 # Paste your CloudNativePG manifest here
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: lab-postgres
+  namespace: default
+spec:
+  instances: 5
+  
+  # The operator will automatically provision a superuser and app user
+  # We are setting it up for a generic "webapp"
+  bootstrap:
+    initdb:
+      database: webapp
+      owner: web_user
+
+  storage:
+    size: 10Gi
+    storageClass: rook-ceph-block
